@@ -79,6 +79,10 @@ for i, idx in enumerate(case_indices):
 top_features = np.argsort(np.abs(shap_values[:, :, 1]).mean(axis=0))[-3:]
 for f in top_features:
     shap.dependence_plot(f, shap_values[:, :, 1], X_test)
+    print("SHAP Values for this case:")
+    print(shap_values[:, :, 1][idx])
+    print("Feature values:")
+    print(X_test.iloc[idx, :])
 #Compare RF Feature Importance vs SHAP Importance (Task 4)
 rf_importance = pd.DataFrame({
     "feature": X.columns,
