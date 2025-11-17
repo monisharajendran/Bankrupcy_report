@@ -80,15 +80,13 @@ Demonstrated consistent negative SHAP values when positive, showing that cash co
 
 Using the actual SHAP arrays and test indices:
 
-Case 1 (High-Risk): index = X
+Case 1 (High-Risk): index = 830
 
-Case 2 (Low-Risk): index = Y
+Case 2 (Low-Risk): index = 498
 
-Case 3 (Borderline): index = Z
+Case 3 (Borderline): index = 1226
 
-(Replace X,Y,Z with your actual outputs when you run the code.)
-
-Case 1  High-Risk Firm (Index X)
+Case 1  High-Risk Firm (Index 128)
 Top SHAP Contributions (actual values from plot)
 
 ROA(C): +0.82 logits
@@ -107,7 +105,7 @@ Even though the firm had small positive cash flow, this counteracting effect was
 Financially, this company exhibits the classic early-stage insolvency pattern:
 high leverage, collapsing profits, inconsistent earnings.
 
-Case 2 Low-Risk Firm (Index Y)
+Case 2 Low-Risk Firm (Index 498)
 Top SHAP Contributions
 
 ROA(C): –0.91
@@ -122,7 +120,7 @@ Strong profitability and positive long-term value growth produced large negative
 
 This company demonstrates robust financial fundamentals, with stable performance buffering any operational fluctuations.
 
-Case 3  Borderline Firm (Index Z)
+Case 3  Borderline Firm (Index 1226)
 Top SHAP Contributions
 
 ROA(C): +0.32
