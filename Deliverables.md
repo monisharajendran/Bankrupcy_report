@@ -1,34 +1,23 @@
 # Model Performance Summary (Random Forest):
-AUC--0.93, 
-Precision (Bankrupt)-- High but conservative,
-Recall (Bankrupt)--Strong sensitivity to risky firms,
-F1-score--Balanced performance,
-Confusion Matrix--Shows effective minority detection.
 
-Hyperparameters: 400 trees improved stability & feature sampling diversity.max_depth=20 avoided overfitting while capturing complex interactions.class_weight="balanced" ensured bankrupt firms were not ignored. Overall, the model balances interpretability, performance, and computational efficiency.
+In reviewing the model’s performance, the tuned Random Forest produced encouraging results, particularly given the imbalance in the dataset. The cross-validated search settled on a configuration with 400 trees, a depth of 20, and balanced class weights, a combination that allowed the model to handle minority-class cases more effectively without inflating variance. With these settings, the model achieved an AUC of 0.953, which indicates that it distinguishes well between firms that eventually fail and those that remain solvent. The test results show that most non-bankrupt firms were correctly identified, and the model detected 31 out of 44 bankrupt firms, giving a recall of 0.70 for the at-risk class. Although precision for this class was lower, which means some healthy firms were flagged as risky, such an outcome is usually acceptable in financial risk analysis, where a missed bankruptcy carries a much higher cost than a false alarm. The minority-class F1-score of 0.56 reflects this trade-off and suggests that the tuned model captures useful patterns related to financial distress rather than relying solely on dominant-class tendencies. Overall, the results indicate that the chosen hyperparameters allow the Random Forest to learn meaningful relationships in the financial indicators while maintaining reasonable sensitivity to distressed firms.
 
 # Interpretation of the global SHAP summary plots,highlighting the top 5 most influential features
-ROA(C) Before Interest and Depreciation--Most influential feature.Low ROA strongly pushes predictions toward bankruptcy.
+The global SHAP summary plot highlights the financial indicators that most strongly influenced the model’s assessment of bankruptcy risk. Across the dataset, five variables consistently showed the largest impact on prediction outcomes: ROA(C) before interest and depreciation, Persistent EPS over the last four quarters, Debt Ratio (%), Net Value Growth Rate, and Cash Flow to Total Assets.
 
-Persistent EPS in the Last Four Seasons--Measures earnings stability.Declining or volatile EPS increases bankruptcy risk.
+The SHAP values show clear directional patterns. Firms with low ROA(C) tend to receive large positive SHAP contributions, meaning the model interprets weak profitability as a strong sign of financial distress. In contrast, high Debt Ratios also produce positive SHAP values, pushing predictions toward the bankrupt class by indicating heavier leverage pressure. Conversely, higher Cash Flow to Total Assets pulls the model toward the non-bankrupt classification, reflecting the stabilising role of cash generation in avoiding insolvency.
 
-Debt Ratio (%)--High leverage is a major financial distress indicator.
-
-Net Value Growth Rate--Negative growth contributes positively to bankruptcy probability.
-
-Cash Flow to Total Assets--Low operating cash flow increases risk despite profits.
-
-This gives a more transparent understanding of model decision-making than Random Forest’s built-in importance.
+The spread of SHAP values for each of the top features also reveals how consistently each variable influences different firms. Features with a wide distribution show that their impact varies significantly across cases, while narrow spreads indicate more uniform behaviour. Taken together, the top features align with established financial theory, reinforcing the credibility of the model’s logic.
 
 # Explanations for the three selected local case studies, referencing the insights derived from the SHAP force plots for each.
-Case 1 — High-risk company ---> Very low profitability (ROA, EPS all negative),Extremely high Debt Ratio,Poor cash flow generation
-SHAP force plot: large red bars push prediction toward “Bankrupt”
-Interpretation: Financial distress is driven by both structural leverage and severe earnings decline.
+Case 1 – High-risk firm
 
-Case 2 — Low-risk company --->Strong ROA,Low leverage,Positive and stable cash flow
-SHAP force plot: large blue bars counter bankruptcy risk
-Interpretation: Healthy operations and stable financial structure strongly reduce risk.
+The force plot for this firm shows that several indicators collectively pushed the prediction strongly toward the bankrupt class. A particularly low ROA(C) produced a large positive contribution to the model’s output, signalling weak operating profitability. A high Debt Ratio added further upward pressure on the prediction. Although the company showed some cash inflow from its assets, this had only a small protective effect and was not enough to outweigh the stronger risk indicators. Overall, most of the firm’s financial characteristics leaned in the direction of distress.
 
-Case 3 — Borderline company (Ambiguous case)--->Moderate ROA,Somewhat high debt,Mixed cash flow
-SHAP force plot: both red and blue bars compete
-Interpretation: This company sits in a gray zone — SHAP helps explain why the model does not confidently classify it.
+Case 2 – Low-risk firm
+
+The SHAP plot for this example showed the opposite pattern. A healthy ROA(C) made a substantial negative contribution to the bankruptcy score, pulling the prediction firmly toward the non-bankrupt class. A positive Net Value Growth Rate strengthened this effect by suggesting a stable or improving long-term financial position. The combined influence of these indicators outweighed any minor risk factors, resulting in a prediction consistent with a financially sound firm.
+
+Case 3 – Borderline firm
+
+The final case displayed a mixture of signals that produced a more ambiguous prediction. ROA(C) was moderately weak, which contributed positively to the bankruptcy score, while a somewhat elevated Debt Ratio reinforced this risk. However, the firm also demonstrated slightly positive cash flow, which generated a small negative influence counteracting part of the distress signal. The competing SHAP contributions explain why the model treated this firm as borderline, with neither class clearly dominating.
