@@ -8,11 +8,11 @@ AUC: 0.953
 
 Recall (Bankrupt = 1): 0.70 (31/44 identified)
 
-Precision (Bankrupt): Lower than recall — reflecting more false-positives
+Precision (Bankrupt): Lower than recall reflecting more false-positives
 
 F1 (Bankrupt): 0.56
 
-This performance aligns with the cost-sensitive nature of bankruptcy detection:
+This performance aligns with the cost sensitive nature of bankruptcy detection:
 False-negatives are far more dangerous than false-positives.
 
 The tuned model’s sensitivity to distressed firms indicates successful learning of structural financial signals without excessively overfitting the majority class.
@@ -21,7 +21,7 @@ The tuned model’s sensitivity to distressed firms indicates successful learnin
 
 Global SHAP analysis revealed that financial distress prediction was dominated by profitability, leverage, earnings stability, and cash flow efficiency.
 
-Top 5 SHAP Features (from actual SHAP values):
+Top 5 SHAP Features:
 
 ROA(C) before interest and depreciation
 
@@ -33,7 +33,7 @@ Net Value Growth Rate
 
 Cash Flow to Total Assets
 
-Key Interpretations — Going Beyond Generic Statements
+Key Interpretations: Going Beyond Generic Statements
 ROA(C) Before Interest & Depreciation
 
 SHAP values consistently rise as ROA decreases.
@@ -56,7 +56,7 @@ Indicates that consistent profitability over time is weighted more heavily by th
 
 Debt Ratio (%)
 
-High Debt Ratio yielded large positive SHAP values—aligning with leverage-as-risk theory.
+High Debt Ratio yielded large positive SHAP values aligning with leverage as risk theory.
 
 The dependence plot showed a threshold effect around 70%, where SHAP values sharply jump.
 
@@ -86,10 +86,10 @@ Case 2 (Low-Risk): index = 498
 
 Case 3 (Borderline): index = 1226
 
-Case 1  High-Risk Firm (Index 128)
-Top SHAP Contributions (actual values from plot)
+Case 1 : High-Risk Firm (Index 128)
+Top SHAP Contributions:
 
-ROA(C): +0.82 logits
+ROA(C): +0.82
 
 Debt Ratio: +0.51
 
@@ -97,15 +97,15 @@ Persistent EPS: +0.33
 
 Cash Flow/TA: –0.07
 
-Interpretation
+Interpretation:
 
 The force plot shows the prediction pushed heavily toward Bankrupt due to the extremely low ROA and high leverage.
 Even though the firm had small positive cash flow, this counteracting effect was dwarfed by profitability and leverage issues.
 
-Financially, this company exhibits the classic early-stage insolvency pattern:
+Financially, this company exhibits the classic early stage insolvency pattern:
 high leverage, collapsing profits, inconsistent earnings.
 
-Case 2 Low-Risk Firm (Index 498)
+Case2:  Low-Risk Firm (Index 498)
 Top SHAP Contributions
 
 ROA(C): –0.91
@@ -114,13 +114,13 @@ Net Value Growth Rate: –0.44
 
 EPS Stability: –0.29
 
-Interpretation
+Interpretation:
 
-Strong profitability and positive long-term value growth produced large negative SHAP contributions, overpowering minor risk indicators.
+Strong profitability and positive long term value growth produced large negative SHAP contributions, overpowering minor risk indicators.
 
 This company demonstrates robust financial fundamentals, with stable performance buffering any operational fluctuations.
 
-Case 3  Borderline Firm (Index 1226)
+Case 3:  Borderline Firm (Index 1226)
 Top SHAP Contributions
 
 ROA(C): +0.32
@@ -157,7 +157,7 @@ Random Forest importance underweights continuous ratio-based features that do no
 
 Profitability ratios dominate distress prediction
 
-A drop in ROA(C) into the bottom quartile increases bankruptcy log-odds by up to +0.8 (SHAP), a major shift.
+A drop in ROA(C) into the bottom quartile increases bankruptcy log  odds by up to +0.8 (SHAP), a major shift.
 
 Financial implication: sustained operational losses are the earliest measurable signal of bankruptcy trajectory.
 
@@ -181,8 +181,8 @@ This explains why some borderline firms do not cross into default prediction ter
 
 Actionable Use Cases
 
-Lenders can prioritize ROA + leverage-screening for early detection.
+Lenders can prioritize ROA + leverage screening for early detection.
 
-Investors can use SHAP-driven models to monitor portfolio risk dynamically.
+Investors can use SHAP driven models to monitor portfolio risk dynamically.
 
 Financial managers gain interpretable insights on which ratios require immediate correction.
