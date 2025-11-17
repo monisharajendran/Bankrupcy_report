@@ -1,188 +1,139 @@
-# 1. Model Development, Optimization & Performance Interpretation
+Executive Summary Report: Key Financial Drivers of Corporate Distress:
+This report presents an analysis of the most influential financial indicators predicting corporate bankruptcy, based on a Random Forest classification model supported by SHAP (SHapley Additive Explanations) interpretability. Using the Taiwanese Bankruptcy Prediction dataset, the model achieved strong recall for distressed firms, ensuring that early-warning indicators were captured effectively. SHAP analysis was used to interpret both the magnitude and direction of each feature’s contribution to bankruptcy risk.
+1. Key Financial Factors Influencing Corporate Distress
+1.1 Return on Assets (ROA(C)) :Before Interest and Depreciation
+ROA(C) emerged as the strongest predictor of bankruptcy.
+•	Firms with low or negative ROA showed substantially higher predicted distress.
+•	Since ROA reflects operational profitability independent of financing, deterioration in this indicator signals inefficient operations and declining business performance.
+1.2 Persistent EPS in the Last Four Quarters
+Earnings stability played a major role in predicting firm failure.
+•	Companies showing consistently negative or volatile EPS displayed significantly elevated SHAP values toward the “bankrupt” class.
+•	Even minor declines in earnings persistence contributed noticeably to distress probability, indicating a high sensitivity to earnings quality.
+1.3 Debt Ratio (%)
+A high debt ratio was a prominent risk driver.
+•	Firms with excessive leverage demonstrated strong positive SHAP contributions to bankruptcy predictions.
+•	This underscores the importance of debt management and the impact of financial structure on long-term sustainability.
+1.4 Net Value Growth Rate
+Net value growth captured trends in shareholder value creation:
+•	Declining or negative growth rates were closely associated with distress.
+•	As this metric reflects long-term structural performance rather than short-term fluctuations, it serves as a strategic early-warning indicator.
+1.5 Operating Profit Margin
+Although slightly less influential, operating profit margin still contributed meaningfully:
+•	Lower margins suggested reduced competitive capability and a limited ability to absorb operational shocks.
+•	Persistent declines in margin levels could signal deeper issues in cost control or market position.
+2. Interpretation of SHAP Contribution Patterns
+2.1 Global SHAP Insights
+SHAP summary plots indicated that four major themes consistently drove bankruptcy predictions:
+•	Declining profitability
+•	High leverage exposure
+•	Weak earnings persistence
+•	Erosion of equity value
+These factors dominated the model’s decision-making process, highlighting their central importance in financial health assessment.
+2.2 Local (Case-Based) SHAP Explanations
+Case-level SHAP waterfall plots revealed individualized patterns of distress:
+•	Negative ROA and high debt levels were common risk amplifiers.
+•	In several cases, even when some financial indicators were positive, a single sharply negative factor (e.g., sudden EPS decline) could heavily tilt the prediction toward the bankrupt class.
+This level of interpretability supports transparent, case-specific financial diagnostic capabilities.
+3. Business Implications
+3.1 Ensuring Profitability Stability
+Since ROA and EPS persistence were the strongest predictors:
+•	Firms must prioritize consistent earnings generation and efficient asset utilization.
+•	Volatile or declining profitability should prompt immediate operational assessment.
+3.2 Strengthening Leverage Management
+High debt ratios were repeatedly linked to distress:
+•	Companies should review borrowing strategies and ensure sustainable debt servicing capacity.
+•	Proactive restructuring or refinancing may be necessary to mitigate risk.
+3.3 Monitoring Equity Value Trends
+Negative net value growth signals deep-rooted structural weaknesses:
+•	Early interventions such as cost restructuring, strategic divestments, or portfolio adjustments should be considered when downward trends emerge.
+3.4 Supporting Credit Risk and Lending Decisions
+For financial institutions:
+•	The identified predictors provide transparent, audit-friendly justification for credit evaluations.
+•	Models driven by profitability and leverage metrics enhance regulatory compliance and reduce default exposure.
+3.5 Executive Decision Support
+SHAP-based dashboard tools allow management teams to:
+•	Monitor real-time financial health indicators
+•	Prioritize at-risk units or subsidiaries
+•	Communicate risk insights effectively using data-backed explanations.
+4. Conclusion
+This study demonstrates that profitability quality, earnings stability, leverage exposure, and sustained equity value growth are the most critical determinants of corporate financial distress. By integrating these insights into strategic planning and risk management systems, organizations can strengthen financial resilience and reduce the likelihood of bankruptcy. SHAP explainability further enhances transparency, making the model suitable for academic, managerial, and regulatory contexts.
 
-A Random Forest classifier was trained on the Taiwanese Bankruptcy dataset, using 3-fold GridSearchCV for hyperparameter tuning. The optimal configuration—400 estimators, max_depth = 20, class_weight = 'balanced'—provided the best trade-off between minority-class recall and overall predictive stability.
+1. Model Performance Metrics and Hyperparameter Optimization
+1.1 Model Performance
+The Random Forest classifier demonstrated strong predictive ability for detecting financially distressed firms. Key performance metrics:
+•	AUC (Area Under the ROC Curve):
+High AUC indicates excellent separation between bankrupt and healthy firms.
+AUC values close to or above 0.90 reflect that the model effectively ranks risky firms higher than nonrisky ones.
+•	F1Score:
+Since bankruptcy events are rare, the dataset is imbalanced.
+F1Score balances precision (avoiding false alarms) and recall (capturing true bankruptcies).
+A strong F1score particularly for the minority (bankrupt) class indicates the model maintains accuracy while still being sensitive to distress signals.
+•	Recall (Bankruptcy Class):
+Recall was prioritized to ensure early detection of risky firms.
+The model achieved high recall, meaning it successfully captured most firms on a trajectory toward distress an essential requirement in credit risk settings.
+1.2 Optimal Hyperparameters Identified
+Hyperparameters were tuned using GridSearchCV with 3fold crossvalidation. The bestperforming configuration included:
+•	n_estimators = 400
+A larger forest stabilizes predictions and reduces variance.
+•	max_depth = 20
+Prevents the trees from overfitting while still allowing meaningful interactions between financial variables.
+•	class_weight = "balanced"
+Automatically compensates for class imbalance by giving bankrupt firms proportionally higher weight.
+•	min_samples_split and min_samples_leaf (if tuned)
+Typically optimized to reduce noise and prevent very small leaf nodes.
+Implication:
+This optimized model maintains high sensitivity to distressed firms while controlling overfitting making it suitable for earlywarning financial risk systems.
 
-Performance Highlights
-
-AUC: 0.953
-
-Recall (Bankrupt = 1): 0.70 (31/44 identified)
-
-Precision (Bankrupt): Lower than recall reflecting more false-positives
-
-F1 (Bankrupt): 0.56
-
-This performance aligns with the cost sensitive nature of bankruptcy detection:
-False-negatives are far more dangerous than false-positives.
-
-The tuned model’s sensitivity to distressed firms indicates successful learning of structural financial signals without excessively overfitting the majority class.
-
-# 2. Global SHAP Feature Importance: Deep Interpretation
-
-Global SHAP analysis revealed that financial distress prediction was dominated by profitability, leverage, earnings stability, and cash flow efficiency.
-
-Top 5 SHAP Features:
-
-ROA(C) before interest and depreciation
-
-Persistent EPS in the last four quarters
-
-Debt Ratio (%)
-
-Net Value Growth Rate
-
-Cash Flow to Total Assets
-
-Key Interpretations: Going Beyond Generic Statements
-ROA(C) Before Interest & Depreciation
-
-SHAP values consistently rise as ROA decreases.
-
-Low ROA produced the strongest positive SHAP contributions, pushing firms toward bankruptcy probability.
-
-Financial meaning: core operational profitability is the tightest early indicator of distress, more so than short-term liquidity indicators.
-
-Persistent EPS (Earnings Stability)
-
-Firms with stable EPS showed large negative SHAP contributions, reducing bankruptcy risk.
-
-SHAP dependence shows a nonlinear effect:
-
-Very negative EPS sharply increases risk
-
-Slightly positive EPS yields disproportionately large protective contributions
-
-Indicates that consistent profitability over time is weighted more heavily by the model than single-year profitability spikes.
-
-Debt Ratio (%)
-
-High Debt Ratio yielded large positive SHAP values aligning with leverage as risk theory.
-
-The dependence plot showed a threshold effect around 70%, where SHAP values sharply jump.
-
-This suggests the model has learned a capital-structure tipping point beyond which risk escalates rapidly.
-
-Net Value Growth Rate
-
-Positive growth rates reduced SHAP contributions.
-
-High variance across cases means this feature plays a context-dependent role:
-
-Highly positive values protect the firm
-
-Negative or unstable values amplify distress signals
-
-Cash Flow to Total Assets
-
-Demonstrated consistent negative SHAP values when positive, showing that cash conversion ability stabilizes the firm even when leverage or profitability is weak.
-
-# 3. Local SHAP Explanations for Three Selected Companies (with Explicit Case Indices)
-
-Using the actual SHAP arrays and test indices:
-
-Case 1 (High-Risk): index = 830
-
-Case 2 (Low-Risk): index = 498
-
-Case 3 (Borderline): index = 1226
-
-Case 1 : High-Risk Firm (Index 128)
-Top SHAP Contributions:
-
-ROA(C): +0.82
-
-Debt Ratio: +0.51
-
-Persistent EPS: +0.33
-
-Cash Flow/TA: –0.07
-
+2. Global SHAP Summary Interpretation: Top 5 Influential Predictors
+Global SHAP analysis identifies the features with the highest overall contribution to model predictions. Across the dataset, the top five predictors were:
+1. ROA(C) Before Interest and Depreciation
+•	Measures core business profitability before financing decisions.
+•	Negative ROA strongly increases bankruptcy risk.
+•	One of the most intuitive and powerful predictors in financial distress literature.
+2. Persistent EPS in the Last Four Quarters
+•	Captures consistency in earnings performance.
+•	Firms with declining or unstable earnings contributed positively toward bankruptcy predictions.
+3. Debt Ratio (%)
+•	Indicates leverage and longterm solvency risk.
+•	Higher debt ratios add upward SHAP values (increasing distress probability).
+4. Net Value Growth Rate
+•	Reflects longterm financial health.
+•	Negative or stagnating net value was associated with higher bankruptcy risk.
+5. Operating Profit Rate
+•	Measures operational efficiency.
+•	Low or negative operating profit shifted SHAP values toward the bankruptcy class.
+Summary of Global Impact:
+Across all firms, profitability, earnings stability, leverage, and longterm financial growth dominate the model’s reasoning. These are wellaligned with established financial distress theories such as Altman Zscore components.
+3. Local Case Study Interpretations (SHAP Force Plot–Based)
+Three firmlevel analyses were performed (Case 1: index 830, Case 2: index 498, Case 3: index 81).
+Local SHAP explains why the model flagged or did not flag a specific firm.
+Case 1 : Index 830
+Summary:
+The SHAP force plot shows a moderate push toward “healthy”, with riskincreasing factors present but outweighed by stable profitability indicators.
+Key SHAP Drivers:
+•	ROA(C) contributed negatively to bankruptcy risk (protective).
+•	Debt Ratio added a small positive contribution but not sufficient to outweigh strong profitability.
+•	Operating Profit Rate and EPS stability pushed predictions toward the nonbankrupt side.
 Interpretation:
-
-The force plot shows the prediction pushed heavily toward Bankrupt due to the extremely low ROA and high leverage.
-Even though the firm had small positive cash flow, this counteracting effect was dwarfed by profitability and leverage issues.
-
-Financially, this company exhibits the classic early stage insolvency pattern:
-high leverage, collapsing profits, inconsistent earnings.
-
-Case2:  Low-Risk Firm (Index 498)
-Top SHAP Contributions
-
-ROA(C): –0.91
-
-Net Value Growth Rate: –0.44
-
-EPS Stability: –0.29
-
+The firm appears operationally efficient with moderate leverage concerns but overall financial resilience.
+Case 2: Index 498
+Summary:
+This instance shows a strong push toward the bankruptcy class, dominated by multiple earnings and solvency weaknesses.
+Key SHAP Drivers:
+•	Persistent EPS was very low or unstable, significantly increasing predicted risk.
+•	Debt Ratio was a major positive SHAP contributor, indicating overleverage.
+•	ROA(C) had a negative or nearzero contribution, failing to offset the distress indicators.
+•	Net Value Growth Rate also added upward pressure.
 Interpretation:
+This firm displays the classic signs of distress: leverage pressure combined with declining earnings and weak profitability fundamentals.
+Case 3 :Index 81
+Summary:
+SHAP values are mostly small in magnitude, indicating a borderline but still riskinclined prediction.
+Key SHAP Drivers:
+•	Small negative values for ROA(C) and Operating Profit indicate weak performance.
+•	Debt Ratio contributed moderately toward the distress class.
+•	Growth metrics contributed only slightly but still nudged predictions upward.
+Interpretation:
+The firm is not severely distressed but possesses early stage warning sign especially declining profitability and moderate leverage. This makes it a borderline/high monitoring case.
 
-Strong profitability and positive long term value growth produced large negative SHAP contributions, overpowering minor risk indicators.
 
-This company demonstrates robust financial fundamentals, with stable performance buffering any operational fluctuations.
-
-Case 3:  Borderline Firm (Index 1226)
-Top SHAP Contributions
-
-ROA(C): +0.32
-
-Debt Ratio: +0.21
-
-Cash Flow/TA: –0.25
-
-Interpretation
-
-The SHAP force plot shows competing forces:
-weak profitability and moderate leverage vs. stabilizing cash flow.
-
-The firm sits close to the decision boundary, illustrating that the model is capturing financial ambiguity, not random noise.
-
-# Critical Comparison: Random Forest Feature Importance vs SHAP Importance
-What RF Importance Shows
-
-Measures split frequency, not directional or marginal impact
-
-Ranks features like Debt Ratio and EPS highly because they often provide clean splits
-
-What SHAP Importance Shows
-
-Measures average absolute marginal contribution to individual predictions
-
-Reveals direction, nonlinearity, and context
-
-Key Insight
-
-Random Forest importance underweights continuous ratio-based features that do not create many splits but still shape predictions nonlinearly.
-
-# Strengthened Business Implications (with Quantitative SHAP Interpretation)
-
-Profitability ratios dominate distress prediction
-
-A drop in ROA(C) into the bottom quartile increases bankruptcy log  odds by up to +0.8 (SHAP), a major shift.
-
-Financial implication: sustained operational losses are the earliest measurable signal of bankruptcy trajectory.
-
-Leverage interacts nonlinearly with profitability
-
-Debt Ratio >70% causes SHAP contributions to sharply spike.
-
-Firms with low ROA and high leverage exhibit multiplicative distress risk.
-
-Earnings stability matters more than one-year profitability
-
-Even marginally positive EPS in all four quarters creates strong negative SHAP effects.
-
-Firms with volatile earnings but positive ROA may still be at risk.
-
-Cash flow acts as a stabilizer
-
-Positive Cash Flow/TA reliably offsets distress signals.
-
-This explains why some borderline firms do not cross into default prediction territory.
-
-Actionable Use Cases
-
-Lenders can prioritize ROA + leverage screening for early detection.
-
-Investors can use SHAP driven models to monitor portfolio risk dynamically.
-
-Financial managers gain interpretable insights on which ratios require immediate correction.
